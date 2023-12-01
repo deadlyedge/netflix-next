@@ -1,6 +1,7 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { signOut } from "next-auth/react"
+
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,16 +11,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { signOut } from "next-auth/react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function UserNav() {
+type NavbarProps = {
+  avatar?: string | null
+  username?: string | null
+  email?: string | null
+}
+
+export default function UserNav({ avatar, username, email }: NavbarProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-10 w-10 rounded-sm'>
           <Avatar className='h-10 w-10 rounded-sm'>
-            <AvatarImage src='https://nkljkwikhlggqlnjctge.supabase.co/storage/v1/object/public/user%20image/avatar.png' />
-            <AvatarFallback className='rounded-sm'>Jan</AvatarFallback>
+            <AvatarImage src={avatar || ""} />
+            <AvatarFallback className='rounded-sm'>NA</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -27,14 +34,14 @@ export default function UserNav() {
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>Jan</p>
+            <p className='text-sm font-medium leading-none'>{username || ""}</p>
             <p className='text-xs leading-none text-muted-foreground'>
-              jkasdf@asdkfj.com
+              {email || ""}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>Sign out</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut()}>退出登录</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
